@@ -6,6 +6,26 @@ impl<const BITS: usize, const LIMBS: usize> PartialOrd for Uint<BITS, LIMBS> {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
+
+    #[inline]
+    fn lt(&self, other: &Self) -> bool {
+        self.overflowing_sub(*other).1
+    }
+
+    #[inline]
+    fn le(&self, other: &Self) -> bool {
+        !Self::lt(other, self)
+    }
+
+    #[inline]
+    fn gt(&self, other: &Self) -> bool {
+        Self::lt(other, self)
+    }
+
+    #[inline]
+    fn ge(&self, other: &Self) -> bool {
+        !Self::lt(self, other)
+    }
 }
 
 impl<const BITS: usize, const LIMBS: usize> Ord for Uint<BITS, LIMBS> {
